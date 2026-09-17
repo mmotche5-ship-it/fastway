@@ -1,0 +1,37 @@
+src/
+  App.jsx (NEW routes: /products/:slug, /brands/:id, /retailers/:id, /trending, /deals, /wishlist, /admin)
+  components/
+    Header.jsx
+    ProductCard.jsx
+    Filters.jsx
+    DynamicFilters.jsx ← NEW category-aware (Shoes: Size/Color/Brand/Gender/Material, Laptops: CPU/GPU/RAM/Storage/Screen/Resolution/Refresh/OS, TVs: Size/Resolution/OLED/QLED/LED/Refresh/HDR/HDMI)
+    Footer.jsx (clean, no raw dump)
+    PriceHistory.jsx ← NEW chart + lowest/highest/current
+    ShoppingAssistant.jsx ← NEW AI assistant
+    ProductRecommendations.jsx ← NEW Similar/Cheaper/Premium/Related/Trending/Recently Viewed
+  pages/
+    Home.jsx ← UPGRADED Hero "What are you looking for?" + Trending searches + AI Assistant + Popular Categories (25 hierarchical) + Popular Brands + Today's Deals + Trending + Featured Retailers
+    SearchResults.jsx ← UPGRADED relevance + typo + synonyms + natural language + AI intent + zero-result alternatives + sorting (Relevance/Lowest/Highest/Rating/Reviews/Discount/Newest) + noise control (iPhone case not returned for iPhone)
+    ProductPage.jsx ← UPGRADED SEO-friendly URLs + full buying options comparison (Amazon $X, Walmart $X, Best Buy $X, Costco $X with Shipping/Availability/Warranty/Returns) + variants (SKU/price/availability/image/size/color) + PriceHistory + Recommendations + Affiliate disclosure
+    BrandPage.jsx ← NEW Apple/Samsung/Nike etc with New/Popular/Deals
+    RetailerPage.jsx ← NEW Walmart/Amazon/Best Buy auto uses connected catalogue
+    TrendingPage.jsx ← NEW real signals searches/clicks/views/popularity/price drops
+    DealsPage.jsx ← NEW Today's Deals, Price Drops, Big Discounts, Under $25/$50/$100
+    WishlistPage.jsx ← NEW multiple lists: Wishlist/Gaming/Apartment/Christmas/Clothing/Cars
+    AdminDashboard.jsx ← NEW Total/Active/Retailers/Brands/Price updates/Out-of-stock/Broken/Duplicate/Failed feeds
+  data/
+    database.js ← NEW full schema: [STRIPPED 339 bytes].js ← NEW 26+ brands ready for thousands: Apple, Samsung, Sony, Nike, Adidas, Puma, New Balance, Lululemon, Zara, H&M, Gucci, Prada, Dior, Chanel, Balenciaga, LV, Versace, Rolex, Dyson, Bose, LG, Microsoft, Nintendo, PlayStation, Xbox, Sephora + [STRIPPED 68 bytes].js ← NEW 25 main: Electronics, Fashion, Luxury, Beauty, Home, Furniture, Appliances, Sports, Gaming, Automotive, Tools, Toys, Baby, Pet, Books, Grocery, Jewelry, Watches, Office, Garden, Outdoor, Health, Musical Instruments, Industrial, Travel + subcategories + icons
+    mockProducts.js (dev only, NOT production)
+  services/
+    retailerService.js ← UPGRADED 16 retailers (Amazon, Walmart, Best Buy, eBay, Costco, Target, Home Depot, IKEA, Nike, Adidas, Apple, Samsung, Sephora) + COUNTRIES 16 countries (CA, US, GB, FR, DE, IT, ES, AU, JP, KR, IN, CN, AE, SA, BR, MX)
+    adapters/
+      ProductSource.js (base interface: [STRIPPED 91 bytes])
+      AmazonAdapter, WalmartAdapter, BestBuyAdapter, EbayAdapter, CostcoAdapter, TargetAdapter, IkeaAdapter, NikeAdapter, AdidasAdapter, AppleAdapter, SamsungAdapter ← scalable adapter system, add FutureRetailerAdapter without changing frontend
+    normalizationService.js ← NEW normalizeTitle (Apple iPhone 17 Pro Max 256GB Black vs 256 GB Black vs Black) + normalizeProduct + validateProduct + qualityScore + detects missing image/title/price/brand/invalid price/broken URL/stale inventory/invalid currency/duplicate/incomplete specs
+    searchEngine.js ← NEW keyword, typo correction (iphon→iphone), synonyms (laptop→notebook), brand/model/SKU/UPC/GTIN, natural language parse ("black Nike running shoes under $150" → color=black brand=Nike category=running shoes price<=150), semantic, noise control
+    aiSearch.js ← NEW aiSearchParse: "Find me a laptop for engineering school under $1500" → category=laptop purpose=engineering budget=1500, "Find me a 65 inch OLED TV for PS5 gaming under $2000" → category=TV size>=65 panel=OLED use=gaming budget<=2000, never invents specs
+    ingestionService.js ← NEW Backend pipeline: Retailer API/Feed → Backend ingestion → Raw → normalize → validate → dedupe → catalogue DB → search index → Frontend, no API keys in React
+    analyticsService.js ← NEW trackSearch, trackClick, trackNoResult, getAnalytics - Most searched products/categories/brands/clicked products/retailers/no-result/price ranges/countries/currencies
+    priceHistoryService.js ← NEW generatePriceHistory + getPriceStats (current/lowest/highest/average) + chart
+    currencyService.js ← UPGRADED CAD/USD/EUR/GBP/AUD/JPY/CNY/INR/AED/SAR/BRL/MXN/KRW + "Converted price is estimate"
+  BACKEND_ARCHITECTURE.md ← NEW FRONTEND → FASTWAY API → SEARCH SERVICE → DATABASE → INGESTION → RETAILER APIs, Security (never expose keys in React/VITE/public/GitHub), Performance (pagination/indexed queries/search indexes/caching/CDN/lazy images/API pagination/background ingestion), SEO (title/meta/canonical/structured data)
